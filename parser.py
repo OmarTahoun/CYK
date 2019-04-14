@@ -6,7 +6,7 @@ class production_rule(object):
         A Class that containes the constructed rules
         The rules are constructed in a form of a tree
         with the root having two child nodes
-    """"
+    """
     def __init__(self,  res, a, b):
         self.result = res
         self.rule_1 = a
@@ -100,7 +100,7 @@ class Parser(object):
                 for rule in rules:
                     grammar.parsing_table[0][x].add_production(rule, production_rule(t, None, None), None)
 
-        
+
         for l in range(2,self.length+1):
             for s in range(1,self.length-l+2):
                 for p in range(1,l-1+1):
@@ -126,3 +126,37 @@ class Parser(object):
             print("--------------------------------------------")
             print('The sentence IS NOT accepted in the language')
             print("--------------------------------------------")
+
+    #Print the CYK parse trable for the last sentence that have been parsed.
+    def print_parse_table(self, grammar):
+        try:
+            from tabulate import tabulate
+        except (ModuleNotFoundError,ImportError) as r:
+            import subprocess
+            import sys
+            import logging
+            logging.warning('To print the CYK parser table the Tabulate module is necessary, trying to install it...')
+            subprocess.call([sys.executable, "-m", "pip", "install", 'tabulate'])
+
+            try:
+                from tabulate import tabulate
+                logging.warning('The tabulate module has been instaled succesfuly!')
+
+            except (ModuleNotFoundError,ImportError) as r:
+                logging.warning('Unable to install the tabulate module, please run the command \'pip install tabulate\' in a command line')
+
+
+        lines = []
+
+
+
+        for row in reversed(grammar.parsing_table):
+            l = []
+            for cell in row:
+                l.append(cell.get_types)
+            lines.append(l)
+
+        lines.append(self.tokens)
+        print('')
+        print(tabulate(lines))
+        print('')
