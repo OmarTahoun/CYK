@@ -1,12 +1,16 @@
 from parser import *
 
 class Dictlist(dict):
+    """
+    A Custome Class of a dictionary that has a key and a list as a vlaue
+    """
     def __setitem__(self, key, value):
         try:
             self[key]
         except KeyError:
             super(Dictlist, self).__setitem__(key, [])
         self[key].append(value)
+
 
 class Grammar(object):
     """This class containes the rules for the parsing that arre generated
@@ -26,11 +30,14 @@ class Grammar(object):
             x, y = line.split("->")
             self.rules[y.strip()] = x.strip()
 
+        #Check if the file is empty
         if len(self.rules) == 0:
             raise ValueError("No rules found in the grammar file!")
 
+        #print the Rules found in the text file
         self.show_rules()
 
+    # The funciton to print the Rules
     def show_rules(self):
         print("\nFile read Succesfully. The Rules found are: \n")
 
@@ -39,6 +46,7 @@ class Grammar(object):
                 print(x + " --> " +rule)
         print()
 
+    # Return the rules found to  be used by the parses later
     def check_rule(self,t):
         try:
             return self.rules[t]
